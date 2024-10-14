@@ -5,7 +5,7 @@ import Footer from "./Footer/footer";
 
 export default function Home() {
   return (
-    <div>
+    <div className="bg-[#e8e6e6]">
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex-col">
@@ -13,7 +13,9 @@ export default function Home() {
           <div className="">
             <NavBar />
           </div>
-          
+          <div className="justify-end">
+            <Footer />
+          </div>
           {/* <label htmlFor="my-drawer-2" className="btn btn-circle swap swap-rotate drawer-button fixed top-3 left-3 right-0 lg:hidden">
           
           </label> */}
@@ -34,16 +36,19 @@ export default function Home() {
         </div>
         <div className="drawer-side">
           <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
-          <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+          <ul className="menu bg-[#2C1A1D] text-base-content min-h-full w-80 p-4">
             {/* Sidebar content here */}
-            <li><a>Goggle</a></li>
+            <li><a>Google</a></li>
             <li><a>Apple</a></li>
+            <li><a>Microsoft</a></li>
+            <li><a>NVIDIA</a></li>
+            <li><a>Boeing</a></li>
+            <li><a>Coca-Cola</a></li>
+            <li><a>Nestlé</a></li>
           </ul>
         </div>
       </div>
-      <div className="sticky bottom-0">
-            <Footer />
-          </div>
+      
     </div>
   );
 }

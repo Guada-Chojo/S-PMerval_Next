@@ -1,6 +1,7 @@
 import { LanguageIcon } from "@heroicons/react/16/solid";
 import { CheckIcon } from "@heroicons/react/16/solid";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 
 export default function NavBar() {
     return (
@@ -10,8 +11,9 @@ export default function NavBar() {
             </div> */}
             <div className="flex-1 flex-row-reverse">
                 <ul className="menu menu-horizontal px-1 justify-end">
-                    <div className="form-control">
+                    <div className="flex-row form-control justify-end ">
                         <input type="text" placeholder="Buscar" className="input rounded-badge w-36 h-9 md:w-auto bg-white shadow-md shadow-[#2C1A1D]/25 placeholder-[#140004]" />
+                        <MagnifyingGlassIcon className="size-5 text-[#140004] absolute self-center mr-3 mb-1"/>
                     </div>
                     <li>
                         <details>
@@ -20,7 +22,7 @@ export default function NavBar() {
                                 ARG
                             </summary>
                             <ul className="bg-white rounded-t-none p-2 text-[#140004] border-stone-300">
-                                <li><a>ARG <CheckIcon className="size-5 text[#999999]" /></a></li>
+                                <li><a>ARG <CheckIcon className="size-5" /></a></li>
                                 <li><a>USD</a></li>
                             </ul>
                         </details>
@@ -32,7 +34,7 @@ export default function NavBar() {
                                 Español
                             </summary>
                             <ul className="bg-white rounded-t-none p-2 text-[#140004]">
-                                <li><a>Español <CheckIcon className="size-4 text[#999999]" /></a></li>
+                                <li><a>Español <CheckIcon className="size-4" /></a></li>
                                 <li><a>Inglés</a></li>
                             </ul>
                         </details>
