@@ -3,7 +3,7 @@ import { CheckIcon } from "@heroicons/react/16/solid";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 
-export default function NavBar() {
+export const NavBar = () => {
     return (
         <div className="navbar bg-white">
             {/* <div className="flex-1">
@@ -11,13 +11,15 @@ export default function NavBar() {
             </div> */}
             <div className="flex-1 flex-row-reverse">
                 <ul className="menu menu-horizontal px-1 justify-end">
-                    <div className="flex-row form-control justify-end ">
-                        <input type="text" placeholder="Buscar" className="input rounded-badge w-36 h-9 md:w-auto bg-white shadow-md shadow-[#2C1A1D]/25 placeholder-[#140004]" />
-                        <MagnifyingGlassIcon className="size-5 text-[#140004] absolute self-center mr-3 mb-1"/>
+                    <div className="flex-row form-control justify-end">
+                        <label className="input rounded-badge flex items-center gap-2 h-9 bg-white shadow-md shadow-[#2C1A1D]/25 placeholder-[#140004] text-[#140004]">
+                          <input type="text" placeholder="Buscar" className="grow" />
+                          <MagnifyingGlassIcon className="size-5 text-[#140004] "/>
+                        </label>
                     </div>
-                    <li>
-                        <details>
-                            <summary className="text-[#140004]">
+                    <li className="">
+                        <details className="hover:bg-none">
+                            <summary className=" hover:bg-none text-[#140004]">
                                 <CurrencyDollarIcon className="size-6 text[#999999]" /> 
                                 ARG
                             </summary>

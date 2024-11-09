@@ -1,5 +1,5 @@
 import { LanguageIcon } from "@heroicons/react/24/solid"
-export default function Footer() {
+export const Footer = () => {
     return (
         <footer className="footer footer-center bg-white text-base-content p-4">
             <aside>
