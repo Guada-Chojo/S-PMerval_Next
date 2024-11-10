@@ -1,67 +1,42 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
+import { useToggle } from "@/app/context/toggle.context";
 
 interface NavigationDrawerProps {
-    links: { name: string; href: string; icon: string }[];
-  }
+  links: { name: string; href: string; icon: string }[];
+}
 
-export const SideBar: React.FC<NavigationDrawerProps> = ({links}) => {
-    const [isExpanded, setIsExpanded] = useState(true);
+export const SideBar: React.FC<NavigationDrawerProps> = ({ links }) => {
+  const { isToggled } = useToggle();
+  const [isExpanded, setIsExpanded] = useState(isToggled);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Update isMobile state based on screen width
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+ // Update the isExpanded state whenever isToggled changes
+ useEffect(() => {
+  setIsExpanded(isToggled);
+}, [isToggled]);
 
-  // Collapse the drawer if the screen is small
-  useEffect(() => {
-    setIsExpanded(!isMobile);
-  }, [isMobile]);
+// Update isMobile state based on screen width
+useEffect(() => {
+  const handleResize = () => setIsMobile(window.innerWidth < 768);
+  handleResize();
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
 
-  const toggleDrawer = () => {
-    setIsExpanded((prev: any) => !prev);
-  };
+// Optional: collapse the drawer on mobile view if desired
+useEffect(() => {
+  if (isMobile) setIsExpanded(false);
+}, [isMobile]);
 
   return (
-    <div className="bg-[#e8e6e6] flex">
-      <div className={`drawer ${isExpanded ? 'w-64' : 'w-20'} flex flex-col h-screen bg-base-100 shadow-lg`}>
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        <span className="text-xl font-semibold flex items-center space-x-2">
-          <span>
-              {isExpanded ? 'My App' : 'M'}
-            </span>
-            {isMobile && (
-                <button onClick={toggleDrawer} className="btn btn-square btn-sm">
-                  {isExpanded ? <ChevronLeftIcon className="h-5 w-5" /> : <ChevronRightIcon className="h-5 w-5" />}
-                </button>
-              )}
-        </span>
-          {/* {!isMobile && (
-            <button onClick={toggleDrawer} className="btn btn-square btn-sm">
-              {isExpanded ? '<' : '>'}
-            </button>
-          )} */}
+    <div className="bg-[#ffffff] flex">
+      <div className={`drawer ${isExpanded ? 'w-64' : 'w-20'} flex flex-col h-screen shadow-lg`}>
+        <div className="flex items-center justify-between p-4">
+          <span className="text-xl font-semibold flex items-center space-x-2">
+              <a>{isExpanded ? 'Indice MERV' : <img className="mask mask-squircle" src="./imagenes/merval-index--big.svg"></img>}</a>
+          </span>        
         </div>
-        {/* <div className="drawer-content flex-col">
-          {/* Page content here }
-          <div className="">
-            <NavBar />
-          </div>
-          <div>
-            <div className="p-24">
-              <PieChart />
-            </div>
-          </div>
-          <div className="justify-end">
-            <Footer />
-          </div>
-
-          
-        </div> */}
+        <hr className=" w-[75%] self-center h-0.5 bg-slate-950"></hr>
         <nav className="flex-1 overflow-auto py-4">
           <ul className="menu">
             {links.map((link, index) => (
@@ -75,10 +50,10 @@ export const SideBar: React.FC<NavigationDrawerProps> = ({links}) => {
           </ul>
         </nav>
       </div>
-      <main className="flex-1 p-4">
+      <main className="flex-1 p-4 bg-slate-100">
         {/* Main content goes here */}
       </main>
-      
+
     </div>
   );
 }
