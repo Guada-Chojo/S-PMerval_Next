@@ -47,7 +47,7 @@ export const NavBar = () => {
                         <li>
                             <details>
                                 <summary className="text-[#140004]">
-                                    <LanguageIcon className="size-5 text[#999999]" />
+                                    <LanguageIcon className="size-6 text[#999999]" />
                                     Español
                                 </summary>
                                 <ul className="bg-white rounded-t-none p-2 text-[#140004]">

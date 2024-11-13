@@ -14,7 +14,6 @@ export default function Home() {
         <NavBar />
         <SideBar links={links}/>
       </ToggleProvider>
-      <Footer />
     </>
   );
 }
