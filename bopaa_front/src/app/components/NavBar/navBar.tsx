@@ -14,7 +14,7 @@ export const NavBar = () => {
                     <button className="btn btn-ghost" onClick={toggle}>
                         <Bars3Icon className="size-6 text-[#140004] "></Bars3Icon>
                     </button>
-                    <a className="btn btn-ghost block pt-[1px] text-2xl text-[#D6002A]">
+                    <a className="btn btn-ghost block mb-[5px] text-4xl text-[#D6002A]">
                         S&P MERVAL
                         <hr className=" w-full h-1 bg-[#D6002A]"></hr>
                     </a>
