@@ -9,11 +9,11 @@ export const data = [
 ];
 
 export const options = {
-  title: "Company Performance",
   curveType: "function",
-  legend: { position: "bottom" },
+  backgroundColor: 'transparent',
+  legend: { position: "none" },
+  chartArea: { width: "80%", height: "70%" },
   hAxis: {
-    title: "Date",
     format: "MMM dd, yyyy", // Custom date format
     gridlines: { count: 3 }, // Controls the number of gridlines
   },
@@ -21,21 +21,27 @@ export const options = {
 
 export const LineChart = () => {
   return (
-    <Chart
-      chartType="LineChart"
-      width="100%"
-      height="400px"
-      data={data}
-      options={options}
-      formatters={[
-        {
-          column: 0,
-          type: "DateFormat",
-          options: {
-            timeZone: 0,
-          },
-        },
-      ]}
-    />
+    <div className="bg-white rounded-xl w-[95%] h-[45%] flex flex-col">
+      <div className="p-2 px-4">Cotización</div>
+      <hr className=" border-[1px] w-[90%] self-center pb-0"></hr>
+      <div className="relative w-[100%] h-">
+        <Chart
+          chartType="LineChart"
+          data={data}
+          width="100%"
+          height="100%"
+          options={options}
+          formatters={[
+            {
+              column: 0,
+              type: "DateFormat",
+              options: {
+                timeZone: 0,
+              },
+            },
+          ]}
+        />
+      </div>
+    </div>
   );
 }

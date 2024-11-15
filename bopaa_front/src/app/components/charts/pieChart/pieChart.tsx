@@ -35,6 +35,7 @@ export const PieChart: React.FC<ChartComponentProps> = ({ explodedSlice }) => {
         chartType="PieChart"
         data={data}
         options={options}
+        height={'100%'}
       />
     </div>
   );

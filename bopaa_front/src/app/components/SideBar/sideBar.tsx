@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useToggle } from "@/app/context/toggle.context";
 import { PieChart } from "../charts/pieChart/pieChart";
+import { LineChart } from "../charts/lineChart/lineChart";
+import { ArrowTrendingDownIcon, ArrowTrendingUpIcon } from "@heroicons/react/24/outline";
+import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 
 interface NavigationDrawerProps {
   /* links: { name: string; href: string; icon: string }[]; */
@@ -12,13 +15,13 @@ export const SideBar: React.FC<NavigationDrawerProps> = ({ /* links, */ }) => {
   const [isExpanded, setIsExpanded] = useState(isToggled);
   const [isMobile, setIsMobile] = useState(false);
   const buttons = [
-    { name: "Apple", icon: './imagenes/apple--big.svg' },
-    { name: "Boeing", icon: './imagenes/boeing--big.svg' },
-    { name: "Coca-cola", icon: './imagenes/coca-cola--big.svg' },
-    { name: "Google", icon: './imagenes/alphabet--big.svg' },
-    { name: "Microsoft", icon: './imagenes/microsoft--big.svg' },
-    { name: "Nestlé", icon: './imagenes/nestle--big.svg' },
-    { name: "NVIDIA", icon: './imagenes/nvidia--big.svg' }
+    { name: "Apple", ultCot: 100, var: 12.0, icon: './imagenes/apple--big.svg' },
+    { name: "Boeing", ultCot: 100, var: 0.00, icon: './imagenes/boeing--big.svg' },
+    { name: "Coca-cola", ultCot: 100, var: 18.0, icon: './imagenes/coca-cola--big.svg' },
+    { name: "Google", ultCot: 100, var: -1.79, icon: './imagenes/alphabet--big.svg' },
+    { name: "Microsoft", ultCot: 100, var: 2.00, icon: './imagenes/microsoft--big.svg' },
+    { name: "Nestlé", ultCot: 100, var: 8.00, icon: './imagenes/nestle--big.svg' },
+    { name: "NVIDIA", ultCot: 100, var: -4.35, icon: './imagenes/nvidia--big.svg' }
   ];
 
   const handleButtonClick = (index: number) => {
@@ -44,21 +47,52 @@ export const SideBar: React.FC<NavigationDrawerProps> = ({ /* links, */ }) => {
   }, [isMobile]);
 
   return (
-    <div className="bg-[#ffffff] flex text-black">
-      <div className={`drawer ${isExpanded ? 'w-64' : 'w-20'} flex flex-col h-screen shadow-lg`}>
+    <div className="bg-[#ffffff] flex text-black h-screen">
+      <div className={`drawer ${isExpanded ? 'w-64' : 'w-20'} flex flex-col h-screen`}>
         <div className="flex items-center justify-between p-4">
           <span className="text-xl font-semibold flex items-center space-x-2">
             <a>{isExpanded ? 'Indice MERV' : <img className="mask mask-squircle" src="./imagenes/merval-index--big.svg"></img>}</a>
           </span>
         </div>
         <hr className=" w-[75%] self-center h-0.5 bg-slate-950"></hr>
-        <nav className="flex-1 overflow-auto py-4">
+        <nav className="flex-1 overflow-hidden py-4">
           <ul className="menu">
             {buttons.map((button, index) => (
               <li key={index} className="hover:bg-gray-200">
-                <a onClick={() => handleButtonClick(index)} className="flex items-center space-x-4 px-4 py-2">
-                  <img src={button.icon} className="rounded-xl" />
-                  {isExpanded && <span>{button.name}</span>}
+                <a onClick={() => handleButtonClick(index)} className="flex items-center px-4 py-2">
+
+                  {isExpanded ?
+
+                    <div className="flex items-center content-between">
+                      <img src={button.icon} className="mask mask-squircle" />
+                      <div className="flex-col ml-2 content-around">
+                        <p className="text-sm">{button.name}</p>
+                        <div className="ml-auto flex space-x-1">
+                          <p className="text-sm">{button.ultCot}</p>
+                          <p
+                            className={`text-sm ${button.var < 0
+                                ? "text-[#E5102E]"
+                                : button.var === 0
+                                  ? "text-black"
+                                  : "text-[#27BE69]"
+                              } flex self-center`}
+                          >
+                            {button.var}
+                            {(button.var < 0) ?
+                            <ArrowTrendingDownIcon className="text-[#E5102E] h-5 w-5" /> :
+                            (button.var == 0) ?
+                              <ArrowLongRightIcon className="h-5 w-5" /> :
+                              <ArrowTrendingUpIcon className="text-[#27BE69] h-5 w-5" />
+                          }
+                          </p>
+                          
+                        </div>
+                      </div>
+                    </div> :
+                    <div className="space-x-4">
+                      <img src={button.icon} className="mask mask-squircle" />
+                    </div>
+                  }
                 </a>
               </li>
             ))}
@@ -67,8 +101,10 @@ export const SideBar: React.FC<NavigationDrawerProps> = ({ /* links, */ }) => {
       </div>
       <main className="flex-1 p-4 bg-slate-100">
         {/* Main content goes here */}
-        
-        <PieChart explodedSlice={explodedSlice}/>
+        <div className="flex flex-col h-full justify-around ">
+          <LineChart />
+          <PieChart explodedSlice={explodedSlice} />
+        </div>
       </main>
 
     </div>
