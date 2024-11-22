@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 
 interface ChartComponentProps {
     explodedSlice: number | null;
+    highlightedSlice: number | null;
   }
 
-export const PieChart: React.FC<ChartComponentProps> = ({ explodedSlice }) => {
+export const PieChart: React.FC<ChartComponentProps> = ({ explodedSlice,
+  highlightedSlice, }) => {
+
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+    useEffect(() => {
+      // Update screen size only on the client
+      const updateScreenSize = () => setIsSmallScreen(window.innerWidth < 768);
+      updateScreenSize();
+  
+      window.addEventListener("resize", updateScreenSize);
+      return () => window.removeEventListener("resize", updateScreenSize);
+    }, []);
 
   // Data for the chart
   const data = [
@@ -19,13 +32,21 @@ export const PieChart: React.FC<ChartComponentProps> = ({ explodedSlice }) => {
     ["NVIDIA", 72],
   ];
 
+  // Dynamically build slices: explodedSlice overrides highlightedSlice
+  const slices: Record<number, { offset?: number; color?: string }> = {};
+  if (highlightedSlice !== null) {
+    slices[highlightedSlice] = { color: "orange" }; // Highlight with color
+  }
+  if (explodedSlice !== null) {
+    slices[explodedSlice] = { offset: 0.3 }; // Add offset
+  }
+
   // Initial chart options
   const options = {
-    pieSliceText: "label",
+    pieSliceText: isSmallScreen ? "percentage" : "none", // Labels on small screens
+    legend: { position: isSmallScreen ? "bottom" : "none" },
     backgroundColor: 'transparent',
-    slices: explodedSlice !== null ? { [explodedSlice]: { offset: 0.1 } } : {},
-    tooltip: { trigger: explodedSlice !== null ? "selection" : "none" }, // Disable tooltips unless a slice is exploded
-    enableInteractivity: explodedSlice !== null, // Disable interactions unless a slice is exploded
+    slices,
   };
 
    // Handler function to update exploded slice

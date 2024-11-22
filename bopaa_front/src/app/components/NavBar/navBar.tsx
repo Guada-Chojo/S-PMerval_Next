@@ -32,7 +32,7 @@ export const NavBar = () => {
                 </div>
                 <div className="flex-1 flex-row-reverse">
                     <ul className="menu menu-horizontal px-1 justify-end">
-                        <div className="flex-row form-control justify-end">
+                        {/* <div className="flex-row form-control justify-end">
                             <label className="input rounded-badge flex items-center gap-2 h-9 bg-white shadow-md shadow-[#2C1A1D]/25 placeholder-[#140004] text-[#140004]">
                                 <input type="text" placeholder="Buscar" className="grow" />
                                 <button>
@@ -42,7 +42,7 @@ export const NavBar = () => {
                                     <MagnifyingGlassIcon className="size-5 text-[#140004] " />
                                 </a>
                             </label>
-                        </div>
+                        </div> */}
                         <li className="">
                             <details className="hover:bg-none">
                                 <summary className=" hover:bg-none text-[#140004]">

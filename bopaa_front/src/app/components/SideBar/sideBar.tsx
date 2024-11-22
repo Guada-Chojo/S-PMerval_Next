@@ -4,6 +4,7 @@ import { PieChart } from "../charts/pieChart/pieChart";
 import { LineChart } from "../charts/lineChart/lineChart";
 import { ArrowTrendingDownIcon, ArrowTrendingUpIcon } from "@heroicons/react/24/outline";
 import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
+import TableComponent from "../charts/pieChart/infoTable";
 
 interface NavigationDrawerProps {
   /* links: { name: string; href: string; icon: string }[]; */
@@ -11,6 +12,7 @@ interface NavigationDrawerProps {
 
 export const SideBar: React.FC<NavigationDrawerProps> = ({ /* links, */ }) => {
   const [explodedSlice, setExplodedSlice] = useState<number | null>(null);
+  const [highlightedSlice, setHighlightedSlice] = useState<number | null>(null);
   const { isToggled } = useToggle();
   const [isExpanded, setIsExpanded] = useState(isToggled);
   const [isMobile, setIsMobile] = useState(false);
@@ -22,6 +24,17 @@ export const SideBar: React.FC<NavigationDrawerProps> = ({ /* links, */ }) => {
     { name: "Microsoft", ultCot: 100, var: 2.00, icon: './imagenes/microsoft--big.svg' },
     { name: "Nestlé", ultCot: 100, var: 8.00, icon: './imagenes/nestle--big.svg' },
     { name: "NVIDIA", ultCot: 100, var: -4.35, icon: './imagenes/nvidia--big.svg' }
+  ];
+
+  const data = [
+    ["Category", "Value"],
+    ["Apple", 45],
+    ["Boeing", 30],
+    ["Coca-cola", 25],
+    ["Google", 20],
+    ["Microsoft", 50],
+    ["Nestlé", 18],
+    ["NVIDIA", 72],
   ];
 
   const handleButtonClick = (index: number) => {
@@ -63,7 +76,7 @@ export const SideBar: React.FC<NavigationDrawerProps> = ({ /* links, */ }) => {
 
                   {isExpanded ?
 
-                    <div className="flex items-center content-between">
+                    <div className="flex items-center content-between ">
                       <img src={button.icon} className="mask mask-squircle" />
                       <div className="flex-col ml-2 content-around">
                         <p className="text-sm">{button.name}</p>
@@ -71,21 +84,21 @@ export const SideBar: React.FC<NavigationDrawerProps> = ({ /* links, */ }) => {
                           <p className="text-sm">{button.ultCot}</p>
                           <p
                             className={`text-sm ${button.var < 0
-                                ? "text-[#E5102E]"
-                                : button.var === 0
-                                  ? "text-black"
-                                  : "text-[#27BE69]"
+                              ? "text-[#E5102E]"
+                              : button.var === 0
+                                ? "text-black"
+                                : "text-[#27BE69]"
                               } flex self-center`}
                           >
                             {button.var}
                             {(button.var < 0) ?
-                            <ArrowTrendingDownIcon className="text-[#E5102E] h-5 w-5" /> :
-                            (button.var == 0) ?
-                              <ArrowLongRightIcon className="h-5 w-5" /> :
-                              <ArrowTrendingUpIcon className="text-[#27BE69] h-5 w-5" />
-                          }
+                              <ArrowTrendingDownIcon className="text-[#E5102E] h-5 w-5" /> :
+                              (button.var == 0) ?
+                                <ArrowLongRightIcon className="h-5 w-5" /> :
+                                <ArrowTrendingUpIcon className="text-[#27BE69] h-5 w-5" />
+                            }
                           </p>
-                          
+
                         </div>
                       </div>
                     </div> :
@@ -103,7 +116,16 @@ export const SideBar: React.FC<NavigationDrawerProps> = ({ /* links, */ }) => {
         {/* Main content goes here */}
         <div className="flex flex-col h-full justify-around ">
           <LineChart />
-          <PieChart explodedSlice={explodedSlice} />
+          <div className="flex md:flex-row md:space-x-4">
+            <PieChart explodedSlice={explodedSlice} highlightedSlice={highlightedSlice} />
+            <div className="md:w-1/3 w-full hidden md:block">
+              <TableComponent
+                data={data}
+                onHover={setHighlightedSlice}
+                onClick={setHighlightedSlice}
+              />
+            </div>
+          </div>
         </div>
       </main>
 
