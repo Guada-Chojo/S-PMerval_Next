@@ -1,47 +1,75 @@
-import { Chart } from "react-google-charts";
+import React from 'react';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
-export const data = [
-  ["Time", "Sales", "Expenses"],
-  [new Date(2022, 4, 15, 9, 30), 1030, 540],
-  [new Date(2022, 4, 17, 10, 30), 1000, 400],
-  [new Date(2022, 5, 13, 11, 30), 1170, 460],
-  [new Date(2022, 6, 13, 12, 30), 660, 1120],
-];
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 export const options = {
-  curveType: "function",
-  backgroundColor: 'transparent',
-  legend: { position: "none" },
-  chartArea: { width: "80%", height: "70%" },
-  hAxis: {
-    format: "MMM dd, yyyy", // Custom date format
-    gridlines: { count: 3 }, // Controls the number of gridlines
+  responsive: true,
+  interaction: {
+    mode: 'index' as const,
+    intersect: false,
+  },
+  stacked: false,
+  plugins: {
+    title: {
+      display: true,
+      text: 'Chart.js Line Chart - Multi Axis',
+    },
+  },
+  scales: {
+    y: {
+      type: 'linear' as const,
+      display: true,
+      position: 'left' as const,
+    },
+    y1: {
+      type: 'linear' as const,
+      display: true,
+      position: 'right' as const,
+      grid: {
+        drawOnChartArea: false,
+      },
+    },
   },
 };
 
-export const LineChart = () => {
+const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
+export const data = {
+  labels,
+  datasets: [
+    {
+      label: 'Dataset 1',
+      data: [65, 59, 80, 81, 56, 55, 40],
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      yAxisID: 'y',
+    },
+  ],
+};
+
+export function LineChart() {
   return (
-    <div className="bg-white rounded-xl w-[95%] h-[45%] flex flex-col">
-      <div className="p-2 px-4">Cotización</div>
-      <hr className=" border-[1px] w-[90%] self-center pb-0"></hr>
-      <div className="relative w-[100%] h-">
-        <Chart
-          chartType="LineChart"
-          data={data}
-          width="100%"
-          height="100%"
-          options={options}
-          formatters={[
-            {
-              column: 0,
-              type: "DateFormat",
-              options: {
-                timeZone: 0,
-              },
-            },
-          ]}
-        />
-      </div>
+    <div className='bg-white rounded-xl h-[50%] w-full'>
+      <Line options={options} data={data} className='w-full' />
     </div>
   );
 }

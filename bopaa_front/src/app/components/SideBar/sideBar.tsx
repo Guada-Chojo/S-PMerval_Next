@@ -4,41 +4,30 @@ import { PieChart } from "../charts/pieChart/pieChart";
 import { LineChart } from "../charts/lineChart/lineChart";
 import { ArrowTrendingDownIcon, ArrowTrendingUpIcon } from "@heroicons/react/24/outline";
 import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
-import TableComponent from "../charts/pieChart/infoTable";
+import { InfoTable } from "../charts/pieChart/infoTable";
+import './sideBar.css';
 
 interface NavigationDrawerProps {
-  /* links: { name: string; href: string; icon: string }[]; */
+  labels: string[];
 }
 
-export const SideBar: React.FC<NavigationDrawerProps> = ({ /* links, */ }) => {
-  const [explodedSlice, setExplodedSlice] = useState<number | null>(null);
-  const [highlightedSlice, setHighlightedSlice] = useState<number | null>(null);
+export const SideBar/* : React.FC<NavigationDrawerProps>  */= ({ /* labels */ }) => {
+  const [highlightSegment, setHighlightSegment] = useState<string | null>(null);
   const { isToggled } = useToggle();
   const [isExpanded, setIsExpanded] = useState(isToggled);
   const [isMobile, setIsMobile] = useState(false);
   const buttons = [
     { name: "Apple", ultCot: 100, var: 12.0, icon: './imagenes/apple--big.svg' },
     { name: "Boeing", ultCot: 100, var: 0.00, icon: './imagenes/boeing--big.svg' },
-    { name: "Coca-cola", ultCot: 100, var: 18.0, icon: './imagenes/coca-cola--big.svg' },
+    { name: "Coca-Cola", ultCot: 100, var: 18.0, icon: './imagenes/coca-cola--big.svg' },
     { name: "Google", ultCot: 100, var: -1.79, icon: './imagenes/alphabet--big.svg' },
     { name: "Microsoft", ultCot: 100, var: 2.00, icon: './imagenes/microsoft--big.svg' },
     { name: "Nestlé", ultCot: 100, var: 8.00, icon: './imagenes/nestle--big.svg' },
     { name: "NVIDIA", ultCot: 100, var: -4.35, icon: './imagenes/nvidia--big.svg' }
   ];
 
-  const data = [
-    ["Category", "Value"],
-    ["Apple", 45],
-    ["Boeing", 30],
-    ["Coca-cola", 25],
-    ["Google", 20],
-    ["Microsoft", 50],
-    ["Nestlé", 18],
-    ["NVIDIA", 72],
-  ];
-
-  const handleButtonClick = (index: number) => {
-    setExplodedSlice((prevIndex: any) => (prevIndex === index ? null : index));
+  const handleButtonClick = (label: string) => {
+    setHighlightSegment(label);
   };
 
   // Update the isExpanded state whenever isToggled changes
@@ -72,7 +61,7 @@ export const SideBar: React.FC<NavigationDrawerProps> = ({ /* links, */ }) => {
           <ul className="menu">
             {buttons.map((button, index) => (
               <li key={index} className="hover:bg-gray-200">
-                <a onClick={() => handleButtonClick(index)} className="flex items-center px-4 py-2">
+                <a onClick={() => handleButtonClick(button.name)} className="flex items-center px-4 py-2">
 
                   {isExpanded ?
 
@@ -80,7 +69,7 @@ export const SideBar: React.FC<NavigationDrawerProps> = ({ /* links, */ }) => {
                       <img src={button.icon} className="mask mask-squircle" />
                       <div className="flex-col ml-2 content-around">
                         <p className="text-sm">{button.name}</p>
-                        <div className="ml-auto flex space-x-1">
+                        <div className="ml-auto flex space-x-1 justify-between">
                           <p className="text-sm">{button.ultCot}</p>
                           <p
                             className={`text-sm ${button.var < 0
@@ -115,15 +104,12 @@ export const SideBar: React.FC<NavigationDrawerProps> = ({ /* links, */ }) => {
       <main className="flex-1 p-4 bg-slate-100">
         {/* Main content goes here */}
         <div className="flex flex-col h-full justify-around ">
-          <LineChart />
+         <LineChart />
           <div className="flex md:flex-row md:space-x-4">
-            <PieChart explodedSlice={explodedSlice} highlightedSlice={highlightedSlice} />
-            <div className="md:w-1/3 w-full hidden md:block">
-              <TableComponent
-                data={data}
-                onHover={setHighlightedSlice}
-                onClick={setHighlightedSlice}
-              />
+            <div className="">
+              <PieChart highlightSegment={highlightSegment}/>
+            </div>
+            <div className="md:w-1/3 w-full hidden md:block ">
             </div>
           </div>
         </div>
