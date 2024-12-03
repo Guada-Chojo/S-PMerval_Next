@@ -2,38 +2,50 @@ import { useEffect, useState } from "react";
 import { useToggle } from "@/app/context/toggle.context";
 import { PieChart } from "../charts/pieChart/pieChart";
 import { LineChart } from "../charts/lineChart/lineChart";
-import { ArrowTrendingDownIcon, ArrowTrendingUpIcon } from "@heroicons/react/24/outline";
-import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
-import { InfoTable } from "../charts/pieChart/infoTable";
 import './sideBar.css';
+import { SidebarButton } from "./buttons";
+import { getDataEmpresas, getDataGraficos } from "@/app/services/empresas";
+import { getDataGraficosIndices } from "@/app/services/indices";
+import { LineChartIndex } from "../charts/lineChart/lineChartIndex";
 
 interface NavigationDrawerProps {
   labels: string[];
 }
 
-export const SideBar/* : React.FC<NavigationDrawerProps>  */= ({ /* labels */ }) => {
+export const SideBar/* : React.FC<NavigationDrawerProps>  */ = ({ /* labels */ }) => {
   const [highlightSegment, setHighlightSegment] = useState<string | null>(null);
   const { isToggled } = useToggle();
-  const [isExpanded, setIsExpanded] = useState(isToggled);
   const [isMobile, setIsMobile] = useState(false);
-  const buttons = [
-    { name: "Apple", ultCot: 100, var: 12.0, icon: './imagenes/apple--big.svg' },
-    { name: "Boeing", ultCot: 100, var: 0.00, icon: './imagenes/boeing--big.svg' },
-    { name: "Coca-Cola", ultCot: 100, var: 18.0, icon: './imagenes/coca-cola--big.svg' },
-    { name: "Google", ultCot: 100, var: -1.79, icon: './imagenes/alphabet--big.svg' },
-    { name: "Microsoft", ultCot: 100, var: 2.00, icon: './imagenes/microsoft--big.svg' },
-    { name: "Nestlé", ultCot: 100, var: 8.00, icon: './imagenes/nestle--big.svg' },
-    { name: "NVIDIA", ultCot: 100, var: -4.35, icon: './imagenes/nvidia--big.svg' }
-  ];
 
-  const handleButtonClick = (label: string) => {
-    setHighlightSegment(label);
-  };
+  const [empresas, setEmpresas] = useState([{
+    codEmpresa: '',
+    empresaNombre: '',
+    ultimaCot: '',
+    variacion: ''
+  }]);
 
-  // Update the isExpanded state whenever isToggled changes
+  const getAllEmpresas = async () => {
+    const empresas = await getDataEmpresas();
+    setEmpresas(empresas);
+  }
+
   useEffect(() => {
-    setIsExpanded(isToggled);
-  }, [isToggled]);
+    getAllEmpresas();
+  }, []);
+
+  const [datos, setDatos] = useState<any[]>([]);
+  const [datosI, setDatosI] = useState<any[]>([]);
+  const [labels, setLabels] = useState<any[]>([]);
+  const [labelsI, setLabelsI] = useState<any[]>([]);
+  const [empresa, setEmpresa] = useState<any>({
+    codEmpresa: 'IMV',
+    empresaNombre: 'Indice S&P Merval',
+    ultimaCot: '',
+    variacion: ''
+  });
+
+  const [selectedButton, setSelectedButton] = useState(empresas[0]);
+
 
   // Update isMobile state based on screen width
   useEffect(() => {
@@ -43,74 +55,131 @@ export const SideBar/* : React.FC<NavigationDrawerProps>  */= ({ /* labels */ })
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Optional: collapse the drawer on mobile view if desired
+  const generarColorAleatorio = () => {
+    const r = Math.floor(Math.random() * 255);
+    const g = Math.floor(Math.random() * 255);
+    const b = Math.floor(Math.random() * 255);
+    return `rgba(${r}, ${g}, ${b}, 1)`;
+  };
+
+  const getDatosIndice = async (dias: number) => {
+    const datos = await getDataGraficosIndices(dias, 1);
+    let labels: any[] = [];
+    datos.forEach((dato: any) => {
+      if (dato.hora == '09:00') {
+        const label = `${dato.fecha.substring(8, 10)}-${dato.fecha.substring(5, 7)} ${dato.hora.substring(0, 2)}hs`
+        labels.push(label);
+      } else {
+        const label = `${dato.hora.substring(0, 2)}hs`
+        labels.push(label);
+      }
+    });
+    console.log('Labels:', labels);
+    const datasets: any[] = [];
+    datos.forEach((arrIndice:any) => {
+      const ds = {
+        label: arrIndice[0].codigoIndice,
+        data: arrIndice.map((vi:any) => {
+          return vi.valorIndice;
+        }),
+        borderColor: arrIndice[0].codigoIndice == 'IMV' ? '#31B6A6' : generarColorAleatorio(),
+        backgroundColor: arrIndice[0].codigoIndice === "IMV" ? "rgba(49, 182, 166, 0.2)" : generarColorAleatorio().replace("1)", "0.2)"),
+        borderWidth: arrIndice[0].codigoIndice === 'IMV' ? 3 : 1, // Highlight the index line
+      }
+      datasets.push(ds);
+    });
+
+    /* datasets = datos.map((dataset: any) => ({
+      label: dataset.hora,
+      data: dataset.map((dato: any) => dato.valorIndice),
+      borderColor: dataset.codigoIndice == 'IMV' ? '#31B6A6' : generarColorAleatorio(),
+      backgroundColor: dataset.codigoIndice === "IMV" ? "rgba(49, 182, 166, 0.2)" : generarColorAleatorio().replace("1)", "0.2)"),
+      borderWidth: dataset.codigoIndice === 'IMV' ? 3 : 1, // Highlight the index line */
+
+    console.log("Datos Indices:", datasets);
+    setLabelsI(labels);
+    setDatosI(datasets)
+    // Update the `empresa` state for the index
+    const mainIndex = datasets.find((data: any) => data[0].codigoIndice === 'IMV')[0];
+    setEmpresa({
+      codEmpresa: mainIndex.codigoIndice,
+      empresaNombre: 'Indice S&P Merval',
+      ultimaCot: mainIndex.valorIndice.toFixed(2),
+      variacion: mainIndex.variacion.toFixed(2),
+    });
+  };
+
+
+  const cargarGraficoEmpr = async (empresa: any, dias: number) => {
+    console.log(empresa.codEmpresa);
+
+    const datos = await getDataGraficos(empresa.codEmpresa, dias);
+    console.log("Datos for day:", datos);
+    console.log(datos);
+    let labels: any[] = [];
+    let data: number[] = [];
+    datos.map((dato: any) => {
+      if (dato.hora == '09:00') {
+        const label = `${dato.fecha.substring(8, 10)}-${dato.fecha.substring(5, 7)} ${dato.hora.substring(0, 2)}hs`
+        labels.push(label);
+      } else {
+        const label = `${dato.hora.substring(0, 2)}hs`
+        labels.push(label);
+      }
+      data.push(dato.cotization);
+    })
+    const dataset = [{
+      label: empresa.codEmpresa,
+      data: data,
+      borderColor: '#31B6A6',
+      backgroundColor: '#31B6A6',
+    }]
+    setLabels(labels);
+    setDatos(dataset)
+    setEmpresa(empresa);
+  }
+  const handleButtonClick = (button: typeof empresas[0]) => {
+    setSelectedButton(button);
+    setHighlightSegment(button.codEmpresa);
+    cargarGraficoEmpr(button, 1)
+  };
+
   useEffect(() => {
-    if (isMobile) setIsExpanded(false);
-  }, [isMobile]);
+    getDatosIndice(1);
+  }, []);
+
+  useEffect(() => {
+    if (empresas.length > 0) {
+      setSelectedButton(empresas[0]);
+      cargarGraficoEmpr(empresas[0], 1); // Initialize first chart
+    }
+  }, [empresas]);
+
 
   return (
     <div className="bg-[#ffffff] flex text-black h-screen">
-      <div className={`drawer ${isExpanded ? 'w-64' : 'w-20'} flex flex-col h-screen`}>
-        <div className="flex items-center justify-between p-4">
-          <span className="text-xl font-semibold flex items-center space-x-2">
-            <a>{isExpanded ? 'Indice MERV' : <img className="mask mask-squircle" src="./imagenes/merval-index--big.svg"></img>}</a>
-          </span>
-        </div>
-        <hr className=" w-[75%] self-center h-0.5 bg-slate-950"></hr>
-        <nav className="flex-1 overflow-hidden py-4">
-          <ul className="menu">
-            {buttons.map((button, index) => (
-              <li key={index} className="hover:bg-gray-200">
-                <a onClick={() => handleButtonClick(button.name)} className="flex items-center px-4 py-2">
-
-                  {isExpanded ?
-
-                    <div className="flex items-center content-between ">
-                      <img src={button.icon} className="mask mask-squircle" />
-                      <div className="flex-col ml-2 content-around">
-                        <p className="text-sm">{button.name}</p>
-                        <div className="ml-auto flex space-x-1 justify-between">
-                          <p className="text-sm">{button.ultCot}</p>
-                          <p
-                            className={`text-sm ${button.var < 0
-                              ? "text-[#E5102E]"
-                              : button.var === 0
-                                ? "text-black"
-                                : "text-[#27BE69]"
-                              } flex self-center`}
-                          >
-                            {button.var}
-                            {(button.var < 0) ?
-                              <ArrowTrendingDownIcon className="text-[#E5102E] h-5 w-5" /> :
-                              (button.var == 0) ?
-                                <ArrowLongRightIcon className="h-5 w-5" /> :
-                                <ArrowTrendingUpIcon className="text-[#27BE69] h-5 w-5" />
-                            }
-                          </p>
-
-                        </div>
-                      </div>
-                    </div> :
-                    <div className="space-x-4">
-                      <img src={button.icon} className="mask mask-squircle" />
-                    </div>
-                  }
-                </a>
-              </li>
-            ))}
+      <div className={`transition-all duration-300 bg-white ${isMobile ? (isToggled ? "w-60" : "w-20") : isToggled ? "w-60" : "w-20"
+        } flex flex-col pt-16`}/* {`drawer ${isExpanded ? 'w-64' : 'w-20'} flex flex-col h-screen`} */>
+        <nav className="flex-1 overflow-hidden"> {/* //overflow-hidden py-4 */}
+          <ul className={`${isMobile ? (isToggled ? "pr-1" : "pl-1") : isToggled ? "pr-1" : "pl-1"}`} >
+            {empresas.map((button, index) => (
+              <SidebarButton
+                key={index}
+                {...button}
+                isExpanded={isToggled}
+                icon={`/imagenes/${button.codEmpresa}--big.svg`}
+                onClick={() => handleButtonClick(button)}
+              />))}
           </ul>
         </nav>
       </div>
       <main className="flex-1 p-4 bg-slate-100">
         {/* Main content goes here */}
-        <div className="flex flex-col h-full justify-around ">
-         <LineChart />
-          <div className="flex md:flex-row md:space-x-4">
-            <div className="">
-              <PieChart highlightSegment={highlightSegment}/>
-            </div>
-            <div className="md:w-1/3 w-full hidden md:block ">
-            </div>
+        <div className="flex flex-col h-full justify-around">
+          <LineChart empresa={selectedButton} icon={`/imagenes/${selectedButton.codEmpresa}--big.svg`} datos={datos} labels={labels} getDatos={cargarGraficoEmpr} />
+          <div className="flex flex-row justify-between">
+            <LineChartIndex empresa={empresa} icon='./imagenes/merval-index--big.svg' datos={datosI} labels={labelsI} getDatosIndice={getDatosIndice} />
+            <PieChart highlightSegment={highlightSegment} />
           </div>
         </div>
       </main>

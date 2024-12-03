@@ -1,10 +1,23 @@
 import { LanguageIcon } from "@heroicons/react/24/solid"
+import { useTranslation } from "next-i18next";
+
 export const Footer = () => {
+    const { t } = useTranslation();
     return (
-        <footer className="footer footer-center bg-white text-base-content p-4">
-            <aside>
-                <p>Copyright © {new Date().getFullYear()} - All right reserved by ACME Industries Ltd </p>
-            </aside>
-        </footer>
+        <div>
+            <hr className=" w-full h-2 bg-divider bg-cover"></hr>
+            <footer className="footer footer-center bg-white text-black p-4">
+                <aside>
+                    <div className="flex items-center">
+                        <div className="">{t('copyright1')} © {new Date().getFullYear()} - {t('copyright2')}</div>
+                        <hr></hr>
+                        <a href="https://github.com/Guada-Chojo" className="flex items-center">
+                            <img src="/imagenes/gitHub.svg" className="size-6"></img>
+                            <div>Guada-Chojo</div>
+                        </a>
+                    </div>
+                </aside>
+            </footer>
+        </div>
     )
 }

@@ -12,6 +12,7 @@ export const ToggleProvider = ({ children }: { children: ReactNode }) => {
 
   // Load the saved toggle state from local storage on initial render
   useEffect(() => {
+    console.log("Loaded toggle state:", localStorage.getItem("isToggled"));
     const savedState = localStorage.getItem('isToggled');
     if (savedState !== null) {
       setIsToggled(JSON.parse(savedState));
