@@ -1,3 +1,4 @@
+import { useCurrency } from "@/app/context/currency.context";
 import {
     ArrowTrendingDownIcon,
     ArrowTrendingUpIcon,
@@ -23,10 +24,11 @@ import {
     isExpanded,
     onClick,
   }) => {
+    const { conversionRate, currency } = useCurrency();
     return (
       <li
         className={`hover:bg-gray-100 cursor-pointer transition-all duration-150 ${
-          isExpanded ? "px-4 py-4" : "px-2 py-2"
+          isExpanded ? "px-5 py-6" : "px-2 py-2" 
         }`}
       >
         <a onClick={onClick} className="flex items-center">
@@ -34,14 +36,14 @@ import {
             src={icon}
             alt={`${codEmpresa} icon`}
             className={`mask mask-squircle ${
-              isExpanded ? "h-14 w-14" : "h-14 w-14"
+               isExpanded ? "h-14 w-14" :  "h-14 w-14" 
             }`}
           />
           {isExpanded && (
             <div className="ml-3 flex-grow">
               <p className="text-base font-medium">{empresaNombre}</p>
               <div className="flex items-center justify-between">
-                <span className="text-sm">{ultimaCot}</span>
+                <span className="text-sm">{(Number(ultimaCot)*conversionRate).toFixed(2)} {currency}</span>
                 <span
                   className={`flex items-center text-sm ${
                     Number(variacion) < 0
@@ -62,7 +64,7 @@ import {
                 </span>
               </div>
             </div>
-          )}
+           )} 
         </a>
       </li>
     );

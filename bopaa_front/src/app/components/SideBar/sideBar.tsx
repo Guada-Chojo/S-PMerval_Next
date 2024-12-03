@@ -14,10 +14,17 @@ interface NavigationDrawerProps {
 
 export const SideBar/* : React.FC<NavigationDrawerProps>  */ = ({ /* labels */ }) => {
   const [highlightSegment, setHighlightSegment] = useState<string | null>(null);
-  const { isToggled } = useToggle();
+  /* const { isToggled } = useToggle(); */
   const [isMobile, setIsMobile] = useState(false);
 
   const [empresas, setEmpresas] = useState([{
+    codEmpresa: '',
+    empresaNombre: '',
+    ultimaCot: '',
+    variacion: ''
+  }]);
+
+  const [empresasGrf, setEmpresasGrf] = useState([{
     codEmpresa: '',
     empresaNombre: '',
     ultimaCot: '',
@@ -37,7 +44,7 @@ export const SideBar/* : React.FC<NavigationDrawerProps>  */ = ({ /* labels */ }
   const [datosI, setDatosI] = useState<any[]>([]);
   const [labels, setLabels] = useState<any[]>([]);
   const [labelsI, setLabelsI] = useState<any[]>([]);
-  const [empresa, setEmpresa] = useState<any>({
+  const [indice, setIndice] = useState<any>({
     codEmpresa: 'IMV',
     empresaNombre: 'Indice S&P Merval',
     ultimaCot: '',
@@ -47,14 +54,16 @@ export const SideBar/* : React.FC<NavigationDrawerProps>  */ = ({ /* labels */ }
   const [selectedButton, setSelectedButton] = useState(empresas[0]);
 
 
-  // Update isMobile state based on screen width
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
+ // Update isMobile state based on screen width
+/*   useEffect(() => {
+    console.log('window: ', window.innerWidth)
+    const handleResize = () => setIsMobile(window.innerWidth < 900);
+    console.log('mobile',isMobile)
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
+ */
   const generarColorAleatorio = () => {
     const r = Math.floor(Math.random() * 255);
     const g = Math.floor(Math.random() * 255);
@@ -101,7 +110,7 @@ export const SideBar/* : React.FC<NavigationDrawerProps>  */ = ({ /* labels */ }
     setDatosI(datasets)
     // Update the `empresa` state for the index
     const mainIndex = datasets.find((data: any) => data[0].codigoIndice === 'IMV')[0];
-    setEmpresa({
+    setIndice({
       codEmpresa: mainIndex.codigoIndice,
       empresaNombre: 'Indice S&P Merval',
       ultimaCot: mainIndex.valorIndice.toFixed(2),
@@ -136,7 +145,7 @@ export const SideBar/* : React.FC<NavigationDrawerProps>  */ = ({ /* labels */ }
     }]
     setLabels(labels);
     setDatos(dataset)
-    setEmpresa(empresa);
+    setEmpresasGrf(empresa);
   }
   const handleButtonClick = (button: typeof empresas[0]) => {
     setSelectedButton(button);
@@ -158,27 +167,26 @@ export const SideBar/* : React.FC<NavigationDrawerProps>  */ = ({ /* labels */ }
 
   return (
     <div className="bg-[#ffffff] flex text-black h-screen">
-      <div className={`transition-all duration-300 bg-white ${isMobile ? (isToggled ? "w-60" : "w-20") : isToggled ? "w-60" : "w-20"
-        } flex flex-col pt-16`}/* {`drawer ${isExpanded ? 'w-64' : 'w-20'} flex flex-col h-screen`} */>
+      <div className={`transition-all duration-300 bg-white ${!isMobile ? "w-[17rem]" : "w-20"} flex flex-col pt-6`}/* {`drawer ${isExpanded ? 'w-64' : 'w-20'} flex flex-col h-screen`} */>
         <nav className="flex-1 overflow-hidden"> {/* //overflow-hidden py-4 */}
-          <ul className={`${isMobile ? (isToggled ? "pr-1" : "pl-1") : isToggled ? "pr-1" : "pl-1"}`} >
+          <ul className={`${!isMobile ? /* (isToggled ? */ "pr-1" : "pl-1"/* ) : isToggled ? "pr-1" : "pl-1" */}`} >
             {empresas.map((button, index) => (
               <SidebarButton
                 key={index}
                 {...button}
-                isExpanded={isToggled}
+                isExpanded={!isMobile}
                 icon={`/imagenes/${button.codEmpresa}--big.svg`}
                 onClick={() => handleButtonClick(button)}
               />))}
           </ul>
         </nav>
       </div>
-      <main className="flex-1 p-4 bg-slate-100">
+      <main className="flex-1 p-3 bg-slate-100">
         {/* Main content goes here */}
-        <div className="flex flex-col h-full justify-around">
+        <div className="flex flex-col h-full justify-around px-5">
           <LineChart empresa={selectedButton} icon={`/imagenes/${selectedButton.codEmpresa}--big.svg`} datos={datos} labels={labels} getDatos={cargarGraficoEmpr} />
           <div className="flex flex-row justify-between">
-            <LineChartIndex empresa={empresa} icon='./imagenes/merval-index--big.svg' datos={datosI} labels={labelsI} getDatosIndice={getDatosIndice} />
+            <LineChartIndex empresa={indice} icon='./imagenes/merval-index--big.svg' datos={datosI} labels={labelsI} getDatosIndice={getDatosIndice} />
             <PieChart highlightSegment={highlightSegment} />
           </div>
         </div>

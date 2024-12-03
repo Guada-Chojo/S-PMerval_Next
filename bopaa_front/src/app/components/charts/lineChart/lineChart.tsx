@@ -18,6 +18,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
+import { useCurrency } from '@/app/context/currency.context';
 
 
 ChartJS.register(
@@ -71,7 +72,7 @@ export const LineChart: React.FC<LineChartProps> = ({ empresa, icon, datos, labe
       console.log("Fetched data:", datos);
   }
   const {t} = useTranslation();
-
+  const { conversionRate, currency } = useCurrency();
   const data = {
   labels,
   datasets: datos,
@@ -85,7 +86,7 @@ export const LineChart: React.FC<LineChartProps> = ({ empresa, icon, datos, labe
             <div className='pl-3 flex-col'>
             <div className='card-title'>{empresa.codEmpresa}</div>           
               <div className="flex items-center justify-between">
-                  <span className="text-sm">{empresa.ultimaCot}</span>
+                  <span className="text-sm">{(Number(empresa.ultimaCot)*conversionRate).toFixed(2)} {currency}</span>
                   <span
                     className={`flex items-center text-sm pl-5 ${
                       Number(empresa.variacion) < 0

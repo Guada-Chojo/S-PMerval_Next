@@ -6,16 +6,22 @@ import './navBar.css';
 import { useTranslation } from "next-i18next";
 import '@/app/i18n';
 import { useState } from "react";
+import { useCurrency } from "@/app/context/currency.context";
 
 export const NavBar = () => {
-    const { toggle } = useToggle();
+    /* const { toggle } = useToggle(); */
     const {t, i18n} = useTranslation();
-    const [currency, setCurrency] = useState("ARG");
+    const {currency, changeCurrency} = useCurrency();
     const [language, setLanguage] = useState("Español");
 
-    const handleCurrencyChange = (newCurrency: string) => {
+    /* const handleCurrencyChange = (newCurrency: string) => {
         setCurrency(newCurrency);
-    };
+        if (newCurrency === "USD") {
+            setConversionRate(1); // Assume 1 ARG = 1 ARG
+          } else if (newCurrency === "ARG") {
+            setConversionRate(1000); // Example: 1 ARG = 0.01 USD
+          }
+    }; */
 
     const handleLanguageChange = (newLanguage: string) => {
         setLanguage(newLanguage);
@@ -29,9 +35,9 @@ export const NavBar = () => {
         <div>
             <div className="navbar bg-white items-center">
                 <div className="flex-1">
-                    <button className="btn btn-ghost" onClick={toggle}>
+                    {/* <button className="btn btn-ghost" onClick={toggle}>
                         <Bars3Icon className="size-6 text-[#140004] "></Bars3Icon>
-                    </button>
+                    </button> */}
                     <a className="btn btn-ghost block mb-[5px] text-4xl font-bold text-[#D6002A]">
                         S&P MERVAL
                         <hr className=" w-full h-1.5 bg-[#D6002A]"></hr>
@@ -47,14 +53,14 @@ export const NavBar = () => {
                                 </summary>
                                 <ul className="bg-white rounded-t-none p-2 text-[#140004] border-stone-300 z-10">
                                     <li>
-                                        <a onClick={() => handleCurrencyChange("ARG")}>
-                                            ARG {currency === "ARG" && <CheckIcon className="size-5" />}
+                                        <a onClick={() => changeCurrency("USD")}>
+                                            USD {currency === "USD" && <CheckIcon className="size-5" />}
                                         </a>
                                     </li>
                                     <li>
-                                        <a onClick={() => handleCurrencyChange("USD")}>
-                                            USD {currency === "USD" && <CheckIcon className="size-5" />}
-                                        </a>
+                                        <a onClick={() => changeCurrency("ARG")}>
+                                            ARG {currency === "ARG" && <CheckIcon className="size-5" />}
+                                        </a>                                      
                                     </li>
                                 </ul>
                             </details>
