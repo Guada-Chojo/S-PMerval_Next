@@ -9,7 +9,11 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'divider': "url('/imagenes/trianglify-lowres.png')"
+      }
+    },
   },
   plugins: [require('daisyui')],
 }
