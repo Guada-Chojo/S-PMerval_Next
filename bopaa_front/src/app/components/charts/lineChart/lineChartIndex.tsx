@@ -40,7 +40,12 @@ import { useCurrency } from '@/app/context/currency.context';
     stacked: false,
     plugins: {
       legend: {
-        display: false,
+        display: true,
+        position: 'top' as const,
+        labels: {
+          usePointStyle: true,
+          textAlign: 'center' as const,
+        }
       },
     },
     layout: {

@@ -158,6 +158,7 @@ export const SideBar = () => {
     console.log('Useeffect empresas: ',empresas);
     
     if (empresas.length > 0) {
+      setHighlightSegment(empresas[0].codEmpresa);
       setSelectedButton(empresas[0]);
       cargarEmpresa(empresas[0], 5); // Initialize first chart
     }

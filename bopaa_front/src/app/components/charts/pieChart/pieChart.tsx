@@ -17,7 +17,6 @@ export const PieChart: React.FC<PieChartProps> =({ highlightSegment }) => {
     const [dataset, setDataset] = useState<number[]>([]);
     const [labels, setLabels] = useState<string[]>([]);
     const [datos, setDatos] = useState<any[]>([]);
-    // State to store offset for each segment
     const [offsets, setOffsets] = useState<number[]>(Array(7).fill(0));
     const [hoverSegmentIndex, setHoverSegmentIndex] = useState<number | null>(null);
     const {t} = useTranslation();
