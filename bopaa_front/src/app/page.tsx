@@ -1,6 +1,6 @@
 'use client'
 import { Footer } from "./components/Footer/footer";
-import { NavBar } from "./components/navBar/navBar";
+import { NavBar } from "./components/NavBar/navBar";
 import { SideBar } from "./components/SideBar/sideBar";
 import { CurrencyProvider } from "./context/currency.context";
 
