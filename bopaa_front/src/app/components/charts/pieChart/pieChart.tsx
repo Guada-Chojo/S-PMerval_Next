@@ -111,7 +111,7 @@ export const PieChart: React.FC<PieChartProps> =({ highlightSegment }) => {
       <div className="card">
         <div className="card-body p-2 bg-white shadow-lg rounded-xl">
         <div className="pt-0.5 px-4 flex justify-between items-center">
-          <div className="">{t('pie')}</div>
+          <div className="font-semibold text-lg">{t('pie')}</div>
         </div>
           <hr className=" border-[1px] w-[90%] self-center pb-0"></hr>
           <div className="flex flex-row items-center justify-evenly p-5"> 

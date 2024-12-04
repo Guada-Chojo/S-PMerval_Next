@@ -10,7 +10,7 @@ export const Footer = () => {
                 <aside>
                     <div className="flex items-center">
                         <div className="">{t('copyright1')} © {new Date().getFullYear()} - {t('copyright2')}</div>
-                        <hr></hr>
+                        {' '}
                         <a href="https://github.com/Guada-Chojo" className="flex items-center">
                             <img src="/imagenes/gitHub.svg" className="size-6"></img>
                             <div>Guada-Chojo</div>

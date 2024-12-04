@@ -57,13 +57,12 @@ export const options = {
 
 interface LineChartProps {
   empresa: any;
-  icon: string;
   datos: any[];
   labels: any;
   getDatos:Function;
 }
 
-export const LineChart: React.FC<LineChartProps> = ({ empresa, icon, datos, labels, getDatos}) => {
+export const LineChart: React.FC<LineChartProps> = ({ empresa, datos, labels, getDatos}) => {
   const [range, setRange] = useState('day');
   const recargarGrafico = (dias:number) => {  
       setRange(dias === 1 ? 'day' : 'month'); 
@@ -73,8 +72,9 @@ export const LineChart: React.FC<LineChartProps> = ({ empresa, icon, datos, labe
   }
   const {t} = useTranslation();
   const { conversionRate, currency } = useCurrency();
+
   const data = {
-  labels,
+  labels: labels,
   datasets: datos,
 };
   return (
@@ -82,7 +82,7 @@ export const LineChart: React.FC<LineChartProps> = ({ empresa, icon, datos, labe
       <div className='card-body p-2'>
         <div className="pt-2 px-4 flex justify-between items-center">
          <div className='flex items-center pb-1'>
-            <img src={icon} alt={`${empresa.codEmpresa} icon`} className='mask mask-squircle h-12 w-12' />
+            <img src={`/imagenes/${empresa.codEmpresa}--big.svg`} alt={`${empresa.codEmpresa} icon`} className='mask mask-squircle h-12 w-12' />
             <div className='pl-3 flex-col'>
             <div className='card-title'>{empresa.codEmpresa}</div>           
               <div className="flex items-center justify-between">

@@ -7,18 +7,17 @@ import {
     Title,
     Tooltip,
     Legend,
-    layouts,
   } from 'chart.js';
   import { Line } from 'react-chartjs-2';
-  import { useToggle } from '@/app/context/toggle.context';
   import {
     ArrowTrendingDownIcon,
     ArrowTrendingUpIcon,
     ArrowLongRightIcon,
   } from "@heroicons/react/24/outline";
   import { useEffect, useState } from 'react';
-import { callback } from 'chart.js/helpers';
 import { useTranslation } from 'next-i18next';
+import { getDataIndice } from '@/app/services/indices';
+import { useCurrency } from '@/app/context/currency.context';
   
   
   ChartJS.register(
@@ -40,13 +39,13 @@ import { useTranslation } from 'next-i18next';
     stacked: false,
     plugins: {
       legend: {
-        display: true, // Disable the legend
+        display: false, // Disable the legend
       },
-      tooltip: {
+      /* tooltip: {
         callbacks: {
             label: (context: any) => {return 'ejemplo'}
         }
-      }
+      } */
     },
     layout: {
       padding: 20, // Adds padding around the chart content
@@ -65,17 +64,36 @@ import { useTranslation } from 'next-i18next';
     labels: any;
     getDatosIndice:Function;
   }
+
+  interface tipoIndice{
+    codigoIndice: string,
+        ultimaCot: string,
+        variacion: number,
+  }
   
   export const LineChartIndex: React.FC<LineChartProps> = ({empresa, icon, datos, labels, getDatosIndice}) => {
     const [range, setRange] = useState('day');
+    const [indice, setIndice] = useState<tipoIndice>()
     const recargarGrafico = (dias:number) => {  
         setRange(dias === 1 ? 'day' : 'month'); 
         getDatosIndice(dias);
     }
+    
     const {t} = useTranslation();
+
+    const { conversionRate, currency } = useCurrency();
+
+    const getIndice = async () => {
+        const indice = await getDataIndice();
+        setIndice(indice);
+    }
+
+    useEffect(() => {
+        getIndice();
+    }, []);
   
     const data = {
-    labels: labels,
+    labels,
     datasets: datos,
   };
     return (
@@ -86,27 +104,28 @@ import { useTranslation } from 'next-i18next';
               <img src={icon} alt={`IMV icon`} className='mask mask-squircle h-12 w-12' />
               <div className='pl-3 flex-col'>
               <div className='card-title'>{t('index')}</div>           
-                <div className="flex items-center justify-between">
-                    <span className="text-sm">{empresa.ultimaCot}</span>
+                { indice !== undefined &&
+                    <div className="flex items-center justify-between">
+                    <span className="text-sm">{(Number(indice.ultimaCot)*conversionRate).toFixed(2)} {currency}</span>
                     <span
                       className={`flex items-center text-sm pl-5 ${
-                        Number(empresa.variacion) < 0
+                        Number(indice.variacion) < 0
                           ? "text-red-600"
-                          : Number(empresa.variacion) === 0
+                          : Number(indice.variacion) === 0
                           ? "text-gray-600"
                           : "text-green-600"
                       }`}
                     >
-                      {empresa.variacion}%
-                      {Number(empresa.variacion) < 0 ? (
+                      {indice.variacion}%
+                      {Number(indice.variacion) < 0 ? (
                         <ArrowTrendingDownIcon className="h-5 w-5 ml-1" />
-                      ) : Number(empresa.variacion) === 0 ? (
+                      ) : Number(indice.variacion) === 0 ? (
                         <ArrowLongRightIcon className="h-5 w-5 ml-1" />
                       ) : (
                         <ArrowTrendingUpIcon className="h-5 w-5 ml-1" />
                       )}
                     </span>
-                  </div>
+                  </div>}
               </div>
             </div>
             <div role="tablist" className="tabs text-black">
