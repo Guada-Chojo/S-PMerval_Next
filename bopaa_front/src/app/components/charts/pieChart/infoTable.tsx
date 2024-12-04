@@ -4,18 +4,10 @@ interface LabelTableProps {
   onHoverRow: (index: number | null) => void; // Function to handle hover events
   labels: string[];
   data: number[]
+  colors: string[];
 }
 
-export const InfoTable: React.FC<LabelTableProps> = ({ onHoverRow, labels, data }) => {
-  const colors = [
-    'rgba(255, 99, 132, 0.4)',
-    'rgba(54, 162, 235, 0.4)',
-    'rgba(255, 206, 86, 0.4)',
-    'rgba(75, 192, 192, 0.4)',
-    'rgba(153, 102, 255, 0.4)',
-    'rgba(255, 159, 64, 0.4)',
-    'rgba(255, 135, 87, 0.4)',
-  ];
+export const InfoTable: React.FC<LabelTableProps> = ({ onHoverRow, labels, data, colors }) => {
   return (
     <div className='bg-white overflow-x-auto rounded-xl'>
       <table className="table-auto w-full">

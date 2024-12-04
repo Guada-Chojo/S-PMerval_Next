@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useToggle } from "@/app/context/toggle.context";
 import { PieChart } from "../charts/pieChart/pieChart";
 import { LineChart } from "../charts/lineChart/lineChart";
 import './sideBar.css';
@@ -9,10 +8,6 @@ import { getDataGraficosIndices } from "@/app/services/indices";
 import { LineChartIndex } from "../charts/lineChart/lineChartIndex";
 import { useCurrency } from "@/app/context/currency.context";
 
-interface NavigationDrawerProps {
-  labels: string[];
-}
-
 interface empresaTipo {
     codEmpresa: string,
     empresaNombre: string,
@@ -20,9 +15,8 @@ interface empresaTipo {
     variacion: string
 };
 
-export const SideBar/* : React.FC<NavigationDrawerProps>  */ = ({ /* labels */ }) => {
+export const SideBar = () => {
   const [highlightSegment, setHighlightSegment] = useState<string | null>(null);
-  /* const { isToggled } = useToggle(); */
   const [isMobile, setIsMobile] = useState(false);
 
   const [empresas, setEmpresas] = useState<empresaTipo[]>([]);
@@ -100,34 +94,11 @@ export const SideBar/* : React.FC<NavigationDrawerProps>  */ = ({ /* labels */ }
       return {
         label: dataset[0].codigoIndice,
         data: data,
-        borderColor:  dataset[0].codigoIndice == 'IMV' ? '#31B6A6' : generarColorAleatorio(),
-        backgroundColor: dataset[0].codigoIndice === "IMV" ? "rgba(49, 182, 166, 0.2)" : generarColorAleatorio().replace("1)", "0.2)"),
-        borderWidth: dataset[0].codigoIndice === 'IMV' ? 3 : 1,
+        borderColor:  dataset[0].codigoIndice == 'IMV' ? '#D6002A' : generarColorAleatorio(),
+        backgroundColor: dataset[0].codigoIndice === "IMV" ? "rgba(214, 0, 42, 0.2)" : generarColorAleatorio().replace("1)", "0.2)"),
+        borderWidth: dataset[0].codigoIndice === 'IMV' ? 5 : 2,
       }
     });
-    /* const datasets: any = {}
-    //indices por hora
-    datos[0].forEach((dato:any, numIteracion: number) => {
-      if (!datasets[dato.codigoIndice]) {
-        datasets[dato.codigoIndice] = {};
-      } 
-      if (!datasets[dato.codigoIndice].data) {
-        datasets[dato.codigoIndice].data = [];
-      } 
-      datasets[dato.codigoIndice] = {
-        data: [...datasets[dato.codigoIndice].data, dato.valorIndice],
-        label: dato.codigoIndice,
-        borderColor:  dato.codigoIndice == 'IMV' ? '#31B6A6' : generarColorAleatorio(),
-        backgroundColor: dato.codigoIndice === "IMV" ? "rgba(49, 182, 166, 0.2)" : generarColorAleatorio().replace("1)", "0.2)"),
-        borderWidth: dato.codigoIndice === 'IMV' ? 3 : 1,
-
-      }
-      
-    });
-    const datasets2: any = [];
-    for (const [key, value] of Object.entries(datasets)) {
-      datasets2.push(value);
-    } */
     setLabelsI(labels);
     setDatosI(datasets)
     // Update the `empresa` state for the index
@@ -176,11 +147,11 @@ export const SideBar/* : React.FC<NavigationDrawerProps>  */ = ({ /* labels */ }
   const handleButtonClick = (button: typeof empresas[0]) => {
     setSelectedButton(button);
     setHighlightSegment(button.codEmpresa);
-    cargarEmpresa(button, 1)
+    cargarEmpresa(button, 5)
   };
 
   useEffect(() => {
-    cargarIndices(1);
+    cargarIndices(5);
   }, []);
 
   useEffect(() => {
@@ -188,7 +159,7 @@ export const SideBar/* : React.FC<NavigationDrawerProps>  */ = ({ /* labels */ }
     
     if (empresas.length > 0) {
       setSelectedButton(empresas[0]);
-      cargarEmpresa(empresas[0], 1); // Initialize first chart
+      cargarEmpresa(empresas[0], 5); // Initialize first chart
     }
   }, [empresas]);
 
@@ -197,7 +168,7 @@ export const SideBar/* : React.FC<NavigationDrawerProps>  */ = ({ /* labels */ }
     <div className="bg-[#ffffff] flex text-black h-screen">
       <div className={`transition-all duration-300 bg-white ${!isMobile ? "w-[17rem]" : "w-20"} flex flex-col pt-6`}/* {`drawer ${isExpanded ? 'w-64' : 'w-20'} flex flex-col h-screen`} */>
         <nav className="flex-1 overflow-hidden"> {/* //overflow-hidden py-4 */}
-          <ul className={`${!isMobile ? /* (isToggled ? */ "pr-1" : "pl-1"/* ) : isToggled ? "pr-1" : "pl-1" */}`} >
+          <ul className={`${!isMobile ? "pr-1" : "pl-1"}`} >
             {empresas.length > 0 && empresas.map((button, index) => (
               <SidebarButton
                 key={index}

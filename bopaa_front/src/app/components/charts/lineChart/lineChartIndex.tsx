@@ -34,21 +34,17 @@ import { useCurrency } from '@/app/context/currency.context';
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
-      mode: 'index' as const,
+      mode: 'nearest' as const,
+      intersect: false,
     },
     stacked: false,
     plugins: {
       legend: {
-        display: false, // Disable the legend
+        display: false,
       },
-      /* tooltip: {
-        callbacks: {
-            label: (context: any) => {return 'ejemplo'}
-        }
-      } */
     },
     layout: {
-      padding: 20, // Adds padding around the chart content
+      padding: 20,
     },
     scales: {
       y: {
@@ -75,7 +71,7 @@ import { useCurrency } from '@/app/context/currency.context';
     const [range, setRange] = useState('day');
     const [indice, setIndice] = useState<tipoIndice>()
     const recargarGrafico = (dias:number) => {  
-        setRange(dias === 1 ? 'day' : 'month'); 
+        setRange(dias === 5 ? 'day' : 'month'); 
         getDatosIndice(dias);
     }
     
@@ -132,7 +128,7 @@ import { useCurrency } from '@/app/context/currency.context';
               <a 
                 role="tab" 
                 className={`tab ${range === 'day' ? 'tab-active' : ''} hover:bg-slate-100 text-black rounded-lg`}
-                onClick={() => recargarGrafico(1)}
+                onClick={() => recargarGrafico(5)}
                 >
                 {t('toggleChart.day')}
                 </a>

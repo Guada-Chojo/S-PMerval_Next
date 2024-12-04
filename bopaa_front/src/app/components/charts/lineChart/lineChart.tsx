@@ -7,16 +7,14 @@ import {
   Title,
   Tooltip,
   Legend,
-  layouts,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { useToggle } from '@/app/context/toggle.context';
 import {
   ArrowTrendingDownIcon,
   ArrowTrendingUpIcon,
   ArrowLongRightIcon,
 } from "@heroicons/react/24/outline";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useCurrency } from '@/app/context/currency.context';
 
@@ -40,11 +38,11 @@ export const options = {
   stacked: false,
   plugins: {
     legend: {
-      display: false, // Disable the legend
+      display: false,
     },
   },
   layout: {
-    padding: 20, // Adds padding around the chart content
+    padding: 20,
   },
   scales: {
     y: {
@@ -65,7 +63,7 @@ interface LineChartProps {
 export const LineChart: React.FC<LineChartProps> = ({ empresa, datos, labels, getDatos}) => {
   const [range, setRange] = useState('day');
   const recargarGrafico = (dias:number) => {  
-      setRange(dias === 1 ? 'day' : 'month'); 
+      setRange(dias === 5 ? 'day' : 'month'); 
       getDatos(empresa, dias);
       console.log("Reloading chart with:", { dias, empresa });
       console.log("Fetched data:", datos);
@@ -112,7 +110,7 @@ export const LineChart: React.FC<LineChartProps> = ({ empresa, datos, labels, ge
             <a 
               role="tab" 
               className={`tab ${range === 'day' ? 'tab-active' : ''} hover:bg-slate-100 text-black rounded-lg`}
-              onClick={() => recargarGrafico(1)}
+              onClick={() => recargarGrafico(5)}
               >
               {t('toggleChart.day')}
               </a>

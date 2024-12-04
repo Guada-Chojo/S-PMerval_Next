@@ -1,7 +1,6 @@
 import { LanguageIcon } from "@heroicons/react/16/solid";
 import { CheckIcon } from "@heroicons/react/16/solid";
-import { Bars3Icon, CurrencyDollarIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useToggle } from "@/app/context/toggle.context";
+import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import './navBar.css';
 import { useTranslation } from "next-i18next";
 import '@/app/i18n';
@@ -9,19 +8,9 @@ import { useState } from "react";
 import { useCurrency } from "@/app/context/currency.context";
 
 export const NavBar = () => {
-    /* const { toggle } = useToggle(); */
     const {t, i18n} = useTranslation();
     const {currency, changeCurrency} = useCurrency();
     const [language, setLanguage] = useState("Español");
-
-    /* const handleCurrencyChange = (newCurrency: string) => {
-        setCurrency(newCurrency);
-        if (newCurrency === "USD") {
-            setConversionRate(1); // Assume 1 ARG = 1 ARG
-          } else if (newCurrency === "ARG") {
-            setConversionRate(1000); // Example: 1 ARG = 0.01 USD
-          }
-    }; */
 
     const handleLanguageChange = (newLanguage: string) => {
         setLanguage(newLanguage);
@@ -35,9 +24,6 @@ export const NavBar = () => {
         <div>
             <div className="navbar bg-white items-center">
                 <div className="flex-1">
-                    {/* <button className="btn btn-ghost" onClick={toggle}>
-                        <Bars3Icon className="size-6 text-[#140004] "></Bars3Icon>
-                    </button> */}
                     <a className="btn btn-ghost block mb-[5px] text-4xl font-bold text-[#D6002A]">
                         S&P MERVAL
                         <hr className=" w-full h-1.5 bg-[#D6002A]"></hr>

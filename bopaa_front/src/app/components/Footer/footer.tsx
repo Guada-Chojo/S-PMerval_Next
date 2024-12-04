@@ -11,8 +11,8 @@ export const Footer = () => {
                     <div className="flex items-center">
                         <div className="">{t('copyright1')} © {new Date().getFullYear()} - {t('copyright2')}</div>
                         {' '}
-                        <a href="https://github.com/Guada-Chojo" className="flex items-center">
-                            <img src="/imagenes/gitHub.svg" className="size-6"></img>
+                        <a href="https://github.com/Guada-Chojo" className="flex items-center hover:underline">
+                            <span className="pl-1 pr-0.5"><img src="/imagenes/gitHub.svg" className="size-6"></img></span>
                             <div>Guada-Chojo</div>
                         </a>
                     </div>

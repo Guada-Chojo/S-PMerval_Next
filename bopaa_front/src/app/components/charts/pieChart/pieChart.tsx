@@ -23,13 +23,13 @@ export const PieChart: React.FC<PieChartProps> =({ highlightSegment }) => {
     const {t} = useTranslation();
     
     const baseColors = [
-      'rgba(255, 99, 132, 0.4)',
-      'rgba(54, 162, 235, 0.4)',
-      'rgba(255, 206, 86, 0.4)',
-      'rgba(75, 192, 192, 0.4)',
-      'rgba(153, 102, 255, 0.4)',
-      'rgba(255, 159, 64, 0.4)',
-      'rgba(255, 135, 87, 0.4)',
+      'rgba(199, 199, 199, 0.4)',
+      'rgba(102, 156, 81, 0.4)',
+      'rgba(255, 209, 5, 0.4)',
+      'rgba(89, 255, 0, 0.4)',
+      'rgba(0, 13, 194, 0.4)',
+      'rgba(277, 0, 0, 0.4)',
+      'rgba(0, 75, 224, 0.4)',
     ];
 
     const obtenerDatos = async () => {
@@ -63,13 +63,13 @@ export const PieChart: React.FC<PieChartProps> =({ highlightSegment }) => {
             hoverSegmentIndex === index ? brightenedColors[index] : color
           ),
           borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)',
-            'rgba(255, 189, 45, 0.2)',
+            'rgba(199, 199, 199, 1)',
+            'rgba(102, 156, 81, 1)',
+            'rgba(255, 209, 5, 1)',
+            'rgba(89, 255, 0, 1)',
+            'rgba(0, 13, 194, 1)',
+            'rgba(277, 0, 0, 1)',
+            'rgba(0, 75, 224, 1)',
           ],
           borderWidth: 1,
           offset: offsets,  // Set the offsets for each slice
@@ -126,7 +126,7 @@ export const PieChart: React.FC<PieChartProps> =({ highlightSegment }) => {
                     },
                   }} />
               </div>
-              <InfoTable onHoverRow={handleHoverRow} labels={labels} data={dataset}/>
+              <InfoTable onHoverRow={handleHoverRow} labels={labels} data={dataset} colors={baseColors}/>
             
           </div>
         </div>
