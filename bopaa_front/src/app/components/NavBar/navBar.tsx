@@ -24,7 +24,7 @@ export const NavBar = () => {
         <div>
             <div className="navbar bg-white items-center">
                 <div className="flex-1">
-                    <a className="btn btn-ghost block mb-[5px] text-4xl font-bold text-[#D6002A]">
+                    <a href='/' className="btn btn-ghost block mb-[5px] text-4xl font-bold text-[#D6002A] hover:bg-transparent">
                         S&P MERVAL
                         <hr className=" w-full h-1.5 bg-[#D6002A]"></hr>
                     </a>
